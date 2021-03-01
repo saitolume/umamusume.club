@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import PrimaryButton from '~/components/Button/PrimaryButton'
 import SecondaryAnchorButton from '~/components/Button/SecondaryAnchorButton'
 import FormGroup from '~/components/FormGroup'
+import Head from '~/components/Head'
 import Heading from '~/components/Heading'
 import Label from '~/components/Label'
 import TextField from '~/components/TextField'
@@ -65,52 +66,60 @@ const Page: NextPage = () => {
   }, [])
 
   return (
-    <section className="mb-10">
-      <Heading>募集</Heading>
-      <form
-        className="px-3 flex flex-col items-center mb-6"
-        onSubmit={handleSubmit(submitSearchForm)}
-      >
-        <FormGroup>
-          <Label htmlFor="representative">代表ウマ娘</Label>
-          <TextField
-            className="w-full"
-            id="representative"
-            list="representative-list"
-            {...register('representative')}
-          />
-          <datalist id="representative-list">
-            <option value="未選択" />
-            {umamusumes?.map((umamusume) => (
-              <option key={umamusume.id} value={umamusume.name} />
-            ))}
-          </datalist>
-        </FormGroup>
-        <FormGroup>
-          <Label htmlFor="support">育成サポート</Label>
-          <TextField className="w-full" id="support" list="support-list" {...register('support')} />
-          <datalist id="support-list">
-            <option value="未選択" />
-            {umamusumes?.map((umamusume) => (
-              <option key={umamusume.id} value={umamusume.name} />
-            ))}
-          </datalist>
-        </FormGroup>
-        <PrimaryButton type="submit">検索</PrimaryButton>
-      </form>
-      <div className="mb-6 flex justify-center">
-        <Link href="/new" passHref>
-          <SecondaryAnchorButton>新しい募集を作る</SecondaryAnchorButton>
-        </Link>
-      </div>
-      <ul className="px-3 pb-16">
-        {trainerIds.map((trainerId) => (
-          <li key={trainerId} className="mb-6">
-            <TrainerCard trainerId={trainerId} />
-          </li>
-        ))}
-      </ul>
-    </section>
+    <>
+      <Head />
+      <section className="mb-10">
+        <Heading>募集</Heading>
+        <form
+          className="px-3 flex flex-col items-center mb-6"
+          onSubmit={handleSubmit(submitSearchForm)}
+        >
+          <FormGroup>
+            <Label htmlFor="representative">代表ウマ娘</Label>
+            <TextField
+              className="w-full"
+              id="representative"
+              list="representative-list"
+              {...register('representative')}
+            />
+            <datalist id="representative-list">
+              <option value="未選択" />
+              {umamusumes?.map((umamusume) => (
+                <option key={umamusume.id} value={umamusume.name} />
+              ))}
+            </datalist>
+          </FormGroup>
+          <FormGroup>
+            <Label htmlFor="support">育成サポート</Label>
+            <TextField
+              className="w-full"
+              id="support"
+              list="support-list"
+              {...register('support')}
+            />
+            <datalist id="support-list">
+              <option value="未選択" />
+              {umamusumes?.map((umamusume) => (
+                <option key={umamusume.id} value={umamusume.name} />
+              ))}
+            </datalist>
+          </FormGroup>
+          <PrimaryButton type="submit">検索</PrimaryButton>
+        </form>
+        <div className="mb-6 flex justify-center">
+          <Link href="/new" passHref>
+            <SecondaryAnchorButton>新しい募集を作る</SecondaryAnchorButton>
+          </Link>
+        </div>
+        <ul className="px-3 pb-16">
+          {trainerIds.map((trainerId) => (
+            <li key={trainerId} className="mb-6">
+              <TrainerCard trainerId={trainerId} />
+            </li>
+          ))}
+        </ul>
+      </section>
+    </>
   )
 }
 

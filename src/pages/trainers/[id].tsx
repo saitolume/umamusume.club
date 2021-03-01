@@ -5,6 +5,7 @@ import React, { useEffect, useMemo } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import PrimaryAnchorButton from '~/components/Button/PrimaryAnchorButton'
 import SecondaryAnchorButton from '~/components/Button/SecondaryAnchorButton'
+import Head from '~/components/Head'
 import Heading from '~/components/Heading'
 import TrainerCard from '~/components/TrainerCard'
 import { actions, getUmamusumeById } from '~/store'
@@ -46,28 +47,31 @@ const Page: NextPage<Props> = (props) => {
   if (props.errorCode) return <Error statusCode={props.errorCode} />
 
   return (
-    <section className="mb-10">
-      <Heading>募集</Heading>
-      <div className="px-3 mb-10">
-        <TrainerCard trainerId={props.trainer.id} />
-      </div>
-      <div className="flex flex-col items-center">
-        <PrimaryAnchorButton
-          className="mb-6"
-          href={shareUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Twitterでシェアする
-        </PrimaryAnchorButton>
-        <Link href="/new" passHref>
-          <SecondaryAnchorButton className="mb-6">新しい募集を作る</SecondaryAnchorButton>
-        </Link>
-        <Link href="/" passHref>
-          <SecondaryAnchorButton className="mb-6">他の募集を探す</SecondaryAnchorButton>
-        </Link>
-      </div>
-    </section>
+    <>
+      <Head title={`${props.trainer.name || '匿名'}さんの募集`} />
+      <section className="mb-10">
+        <Heading>募集</Heading>
+        <div className="px-3 mb-10">
+          <TrainerCard trainerId={props.trainer.id} />
+        </div>
+        <div className="flex flex-col items-center">
+          <PrimaryAnchorButton
+            className="mb-6"
+            href={shareUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Twitterでシェアする
+          </PrimaryAnchorButton>
+          <Link href="/new" passHref>
+            <SecondaryAnchorButton className="mb-6">新しい募集を作る</SecondaryAnchorButton>
+          </Link>
+          <Link href="/" passHref>
+            <SecondaryAnchorButton className="mb-6">他の募集を探す</SecondaryAnchorButton>
+          </Link>
+        </div>
+      </section>
+    </>
   )
 }
 
