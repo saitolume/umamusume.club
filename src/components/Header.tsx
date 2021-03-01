@@ -5,7 +5,7 @@ const Header: VFC = () => (
   <header className="text-uma-text3 bg-uma-surface2 h-14 flex items-center justify-center font-bold border-uma-border2 border-b-2 rounded-br-lg rounded-bl-lg">
     <Link href="/">
       <a>
-        <h1>ウマ娘 プリティーダービー フレンド掲示板</h1>
+        <h1>ウマ娘 プリティーダービー フレンド募集板</h1>
       </a>
     </Link>
   </header>
