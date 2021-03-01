@@ -12,12 +12,23 @@ const App: NextPage<AppProps> = ({ Component, pageProps }) => (
     <Header />
     <div className="md:w-1/2 md:m-auto">
       <section className="px-3 my-8 text-uma-text1 font-bold text-sm">
-        <strong>個人が運営・開発する非公式SNSです。</strong>
+        <strong className="font-bold">
+          個人 (
+          <a
+            className="border-b border-uma-border1"
+            href="https://twitter.com/saitolume"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            @saitolume
+          </a>
+          ) が運営・開発する非公式SNSです。
+        </strong>
         <p>
           フィードバックは
           <a
             className="border-b border-uma-border1"
-            href="/"
+            href="https://forms.gle/EvRVZMNxbAGRq6Hy7"
             target="_blank"
             rel="noopener noreferrer"
           >
