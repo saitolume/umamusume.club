@@ -21,17 +21,14 @@ const TextField: ForwardRefRenderFunction<
 > = ({ className, multiple, ...props }, ref) =>
   multiple ? (
     <textarea
-      className={classNames(
-        'border-uma-border1 border rounded h-10',
-        className
-      )}
+      className={classNames('border-uma-border1 border rounded h-10 px-2', className)}
       ref={ref as RefObject<HTMLTextAreaElement>}
       {...(props as TextareaHTMLAttributes<HTMLTextAreaElement>)}
     />
   ) : (
     <input
       className={classNames(
-        'border-uma-border1 border rounded h-10',
+        'border-uma-border2 border rounded h-10 px-2 font-bold text-uma-text1',
         className
       )}
       ref={ref as RefObject<HTMLInputElement>}

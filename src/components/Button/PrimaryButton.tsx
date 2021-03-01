@@ -6,7 +6,7 @@ type Props = ButtonHTMLAttributes<HTMLButtonElement>
 const PrimatyButton: FC<Props> = ({ children }) => (
   <button
     className={classNames(
-      'bg-uma-surface2 text-uma-text3 border-uma-border2 border w-60 rounded-md font-bold h-10 shadow'
+      'bg-uma-surface2 text-uma-text3 border-uma-border3 border w-60 rounded-md font-bold h-10 shadow'
     )}
   >
     {children}
