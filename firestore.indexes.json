@@ -1,0 +1,51 @@
+{
+  "indexes": [
+    {
+      "collectionGroup": "trainers",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "representativeId",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "createdAt",
+          "order": "DESCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "trainers",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "representativeId",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "supportId",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "createdAt",
+          "order": "DESCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "trainers",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "supportId",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "createdAt",
+          "order": "DESCENDING"
+        }
+      ]
+    }
+  ],
+  "fieldOverrides": []
+}

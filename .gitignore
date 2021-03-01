@@ -1,3 +1,5 @@
 .envrc
+.firebaserc
 .next
+firestore.rules
 node_modules
