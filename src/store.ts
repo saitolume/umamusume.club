@@ -70,13 +70,13 @@ export const getTrainerIds = createSelector(
 )
 
 export const getTrainerById = (id: Trainer['id']) =>
-  createSelector(
+  createSelector<RootState, RootState['trainers'], Trainer | undefined>(
     (state: RootState) => state.trainers,
     (trainers) => trainers[id]
   )
 
 export const getUmamusumeById = (id: Umamusume['id']) =>
-  createSelector(
+  createSelector<RootState, RootState['umamusumes'], Umamusume | undefined>(
     (state: RootState) => state.umamusumes,
     (umamusumes) => umamusumes[id]
   )

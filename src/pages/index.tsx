@@ -10,8 +10,8 @@ import Heading from '~/components/Heading'
 import Label from '~/components/Label'
 import TextField from '~/components/TextField'
 import TrainerCard from '~/components/TrainerCard'
-import { actions, getTrainerById, getTrainerIds, getUmamusumes } from '~/store'
-import { Trainer, Umamusume } from '~/types'
+import { actions, getTrainerIds, getUmamusumes } from '~/store'
+import { Umamusume } from '~/types'
 import { trainerConverter } from '~/utils/converter'
 import { firestore } from '~/utils/firebase'
 
@@ -24,7 +24,6 @@ const Page: NextPage = () => {
   const dispatch = useDispatch()
   const umamusumes = useSelector(getUmamusumes)
   const trainerIds = useSelector(getTrainerIds)
-  const lastTrainer = useSelector(getTrainerById(trainerIds[trainerIds.length - 1]))
 
   const { handleSubmit, register } = useForm<SeaarchValues>({
     defaultValues: {
