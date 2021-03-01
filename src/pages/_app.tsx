@@ -1,10 +1,12 @@
 import { NextPage } from 'next'
 import { AppProps } from 'next/app'
 import React from 'react'
+import Header from '~/components/Header'
+import 'tailwindcss/tailwind.css'
 
 const App: NextPage<AppProps> = ({ Component, pageProps }) => (
   <>
-    <header></header>
+    <Header />
     <main>
       <Component {...pageProps} />
     </main>
