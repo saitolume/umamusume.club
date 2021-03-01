@@ -18,14 +18,13 @@ const TrainerCard: VFC<Props> = (props) => {
   const handleClickCopyButton = useCallback(() => {
     if (trainerIdFieldRef.current === null) return
     trainerIdFieldRef.current.select()
-    const isSuccessful = document.execCommand('copy')
-    console.log(isSuccessful)
+    document.execCommand('copy')
   }, [trainer.trainerId])
 
   return (
     <article className="border border-uma-border4 rounded py-2 px-3">
       <header className="text-uma-text1 font-bold border-b h-10 flex items-center mb-3">
-        <h1>{trainer.name}</h1>
+        <h1>{trainer.name || '匿名'}</h1>
       </header>
       <section className="grid grid-cols-2 gap-x-3 gap-y-5 mb-4">
         <div>

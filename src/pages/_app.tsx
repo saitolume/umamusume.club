@@ -13,16 +13,15 @@ const App: NextPage<AppProps> = ({ Component, pageProps }) => (
     <div className="md:w-1/2 md:m-auto">
       <section className="px-3 my-8 text-uma-text1 font-bold text-sm">
         <strong className="font-bold">
-          個人 (
           <a
             className="border-b border-uma-border1"
             href="https://twitter.com/saitolume"
             target="_blank"
             rel="noopener noreferrer"
           >
-            @saitolume
+            saitolume
           </a>
-          ) が運営・開発する非公式SNSです。
+          が運営・開発する非公式SNSです。
         </strong>
         <p>
           フィードバックは

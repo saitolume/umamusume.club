@@ -16,7 +16,6 @@ const UmamusumeProvider: FC = () => {
   )
 
   useEffect(() => {
-    console.log(umamusumes)
     dispatch(actions.updateUmamusume(umamusumes ?? []))
   }, [umamusumes])
 

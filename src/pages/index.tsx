@@ -12,44 +12,13 @@ import TextField from '~/components/TextField'
 import TrainerCard from '~/components/TrainerCard'
 import { actions, getTrainerById, getTrainerIds, getUmamusumes } from '~/store'
 import { Trainer, Umamusume } from '~/types'
+import { trainerConverter } from '~/utils/converter'
 import { firestore } from '~/utils/firebase'
 
 type SeaarchValues = {
   representative: Umamusume['id']
   support: Umamusume['id']
 }
-
-const getTrainersQuery = () =>
-  firestore()
-    .collection('trainers')
-    .orderBy('createdAt', 'desc')
-    .limit(20)
-    .withConverter({
-      toFirestore(
-        value: Pick<Trainer, 'comment' | 'name' | 'representativeId' | 'supportId' | 'trainerId'>
-      ) {
-        return {
-          trainerId: value.trainerId,
-          name: value.name,
-          representativeId: value.representativeId,
-          supportId: value.supportId,
-          comment: value.comment,
-          createdAt: firestore.FieldValue.serverTimestamp(),
-        }
-      },
-      fromFirestore(doc): Trainer {
-        const data = doc.data()
-        return {
-          id: doc.id,
-          trainerId: data.trainerId,
-          name: data.name,
-          representativeId: data.representativeId,
-          supportId: data.supportId,
-          comment: data.comment,
-          createdAt: data.createdAt.toDate().toString(),
-        }
-      },
-    })
 
 const Page: NextPage = () => {
   const dispatch = useDispatch()
@@ -68,9 +37,15 @@ const Page: NextPage = () => {
     const representativeId = umamusumes?.find(({ name }) => name === values.representative)?.id
     const supportId = umamusumes?.find(({ name }) => name === values.support)?.id
 
-    let query = getTrainersQuery()
+    let query = firestore()
+      .collection('trainers')
+      .orderBy('createdAt', 'desc')
+      .limit(20)
+      .withConverter(trainerConverter)
+
     if (representativeId) query = query.where('representativeId', '==', representativeId)
     if (supportId) query = query.where('supportId', '==', supportId)
+
     query.get().then(({ docs }) => {
       const trainers = docs.map((doc) => doc.data())
       dispatch(actions.updateTrainers(trainers))
@@ -78,11 +53,16 @@ const Page: NextPage = () => {
   }, [])
 
   useEffect(() => {
-    let query = getTrainersQuery()
-    query.get().then(({ docs }) => {
-      const trainers = docs.map((doc) => doc.data())
-      dispatch(actions.updateTrainers(trainers))
-    })
+    firestore()
+      .collection('trainers')
+      .orderBy('createdAt', 'desc')
+      .limit(20)
+      .withConverter(trainerConverter)
+      .get()
+      .then(({ docs }) => {
+        const trainers = docs.map((doc) => doc.data())
+        dispatch(actions.updateTrainers(trainers))
+      })
   }, [])
 
   return (
@@ -120,13 +100,13 @@ const Page: NextPage = () => {
         <PrimaryButton type="submit">検索</PrimaryButton>
       </form>
       <div className="mb-6 flex justify-center">
-        <Link href="/trainers/new" passHref>
+        <Link href="/new" passHref>
           <SecondaryAnchorButton>新しい募集を作る</SecondaryAnchorButton>
         </Link>
       </div>
       <ul className="px-3 pb-16">
         {trainerIds.map((trainerId) => (
-          <li key={trainerId}>
+          <li key={trainerId} className="mb-6">
             <TrainerCard trainerId={trainerId} />
           </li>
         ))}
