@@ -10,6 +10,7 @@ import FormGroup from '~/components/FormGroup'
 import Head from '~/components/Head'
 import Heading from '~/components/Heading'
 import Label from '~/components/Label'
+import Select from '~/components/Select'
 import TextField from '~/components/TextField'
 import { getUmamusumes } from '~/store'
 import { firestore } from '~/utils/firebase'
@@ -42,20 +43,13 @@ const Page: NextPage = () => {
   })
 
   const submitTrainer = useCallback(async (values: Values) => {
-    const representativeId = umamusumes?.find(({ name }) => name === values.representative)?.id
-    const supportId = umamusumes?.find(({ name }) => name === values.support)?.id
-
-    if (representativeId === undefined || supportId === undefined) {
-      return
-    }
-
     const { id } = await firestore()
       .collection('trainers')
       .add({
         trainerId: Number(values.trainerId),
         name: values.name,
-        representativeId,
-        supportId,
+        representativeId: values.representative,
+        supportId: values.support,
         comment: values.comment,
         createdAt: firestore.FieldValue.serverTimestamp(),
       })
@@ -117,17 +111,18 @@ const Page: NextPage = () => {
           </FormGroup>
           <FormGroup>
             <Label htmlFor="representative">代表ウマ娘</Label>
-            <TextField
+            <Select
+              id="support"
               className="w-full"
-              id="representative"
-              list="representative-list"
               {...register('representative', { required: true })}
-            />
-            <datalist id="representative-list">
+            >
+              <option value={undefined}>未選択</option>
               {umamusumes?.map((umamusume) => (
-                <option key={umamusume.id} value={umamusume.name} />
+                <option key={umamusume.id} value={umamusume.id}>
+                  {umamusume.name}
+                </option>
               ))}
-            </datalist>
+            </Select>
             {errors.representative && errors.representative.type === 'required' && (
               <span role="alert" className="text-xs text-uma-text1">
                 選択してください
@@ -136,17 +131,14 @@ const Page: NextPage = () => {
           </FormGroup>
           <FormGroup>
             <Label htmlFor="support">育成サポート</Label>
-            <TextField
-              className="w-full"
-              id="support"
-              list="support-list"
-              {...register('support', { required: true })}
-            />
-            <datalist id="support-list">
+            <Select id="support" className="w-full" {...register('support', { required: true })}>
+              <option value={undefined}>未選択</option>
               {umamusumes?.map((umamusume) => (
-                <option key={umamusume.id} value={umamusume.name} />
+                <option key={umamusume.id} value={umamusume.id}>
+                  {umamusume.name}
+                </option>
               ))}
-            </datalist>
+            </Select>
             {errors.support && errors.support.type === 'required' && (
               <span role="alert" className="text-xs text-uma-text1">
                 選択してください

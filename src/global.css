@@ -12,3 +12,9 @@ a[data-anchor-button]:active {
   box-shadow: none;
   transform: translate3d(0, 2px, 0);
 }
+
+select {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+}

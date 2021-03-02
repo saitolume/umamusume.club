@@ -10,14 +10,14 @@ import FormGroup from '~/components/FormGroup'
 import Head from '~/components/Head'
 import Heading from '~/components/Heading'
 import Label from '~/components/Label'
-import TextField from '~/components/TextField'
+import Select from '~/components/Select'
 import TrainerCard from '~/components/TrainerCard'
 import { actions, getTrainerIds, getUmamusumes } from '~/store'
 import { Trainer, Umamusume } from '~/types'
 import { trainerConverter } from '~/utils/converter'
 import { firestore } from '~/utils/firebase'
 
-type SeaarchValues = {
+type Values = {
   representative: Umamusume['id']
   support: Umamusume['id']
 }
@@ -31,7 +31,7 @@ const Page: NextPage = () => {
   const lastDocRef = useRef<firebase.default.firestore.QueryDocumentSnapshot<Trainer>>()
   const queryRef = useRef<firebase.default.firestore.Query<Trainer>>()
 
-  const { handleSubmit, register } = useForm<SeaarchValues>({
+  const { handleSubmit, register } = useForm<Values>({
     defaultValues: {
       representative: '',
       support: '',
@@ -39,33 +39,26 @@ const Page: NextPage = () => {
   })
 
   const handleClickNextButton = useCallback(async () => {
-    const { docs, query } = await firestore()
-      .collection('trainers')
-      .orderBy('createdAt', 'desc')
-      .withConverter(trainerConverter)
-      .startAfter(lastDocRef.current)
-      .limit(TRAINES_PER_FETCH)
-      .get()
+    if (queryRef.current === undefined) return
+    const { docs, query } = await queryRef.current.startAfter(lastDocRef.current).get()
     const trainers = docs.map((doc) => doc.data())
     dispatch(actions.insertTrainers(trainers))
     lastDocRef.current = docs[docs.length - 1]
     queryRef.current = query
   }, [])
 
-  const submitSearchForm = useCallback(async (values: SeaarchValues) => {
-    const representativeId = umamusumes?.find(({ name }) => name === values.representative)?.id
-    const supportId = umamusumes?.find(({ name }) => name === values.support)?.id
+  const submitSearchForm = useCallback(async (values: Values) => {
     let trainerQuery = firestore()
       .collection('trainers')
       .orderBy('createdAt', 'desc')
       .limit(TRAINES_PER_FETCH)
       .withConverter(trainerConverter)
 
-    if (representativeId) {
-      trainerQuery = trainerQuery.where('representativeId', '==', representativeId)
+    if (values.representative) {
+      trainerQuery = trainerQuery.where('representativeId', '==', values.representative)
     }
-    if (supportId) {
-      trainerQuery = trainerQuery.where('supportId', '==', supportId)
+    if (values.support) {
+      trainerQuery = trainerQuery.where('supportId', '==', values.support)
     }
 
     trainerQuery.get().then(({ docs, query }) => {
@@ -102,33 +95,25 @@ const Page: NextPage = () => {
         >
           <FormGroup>
             <Label htmlFor="representative">代表ウマ娘</Label>
-            <TextField
-              className="w-full"
-              id="representative"
-              list="representative-list"
-              {...register('representative')}
-            />
-            <datalist id="representative-list">
-              <option value="未選択" />
+            <Select id="representative" className="w-full" {...register('representative')}>
+              <option value="">未選択</option>
               {umamusumes?.map((umamusume) => (
-                <option key={umamusume.id} value={umamusume.name} />
+                <option key={umamusume.id} value={umamusume.id}>
+                  {umamusume.name}
+                </option>
               ))}
-            </datalist>
+            </Select>
           </FormGroup>
           <FormGroup>
             <Label htmlFor="support">育成サポート</Label>
-            <TextField
-              className="w-full"
-              id="support"
-              list="support-list"
-              {...register('support')}
-            />
-            <datalist id="support-list">
-              <option value="未選択" />
+            <Select id="support" className="w-full" {...register('support')}>
+              <option value="">未選択</option>
               {umamusumes?.map((umamusume) => (
-                <option key={umamusume.id} value={umamusume.name} />
+                <option key={umamusume.id} value={umamusume.id}>
+                  {umamusume.name}
+                </option>
               ))}
-            </datalist>
+            </Select>
           </FormGroup>
           <PrimaryButton type="submit">検索</PrimaryButton>
         </form>
@@ -145,7 +130,9 @@ const Page: NextPage = () => {
           ))}
         </ul>
         <div className="mb-6 flex justify-center">
-          <SecondaryButton onClick={handleClickNextButton}>もっと見る</SecondaryButton>
+          {trainerIds.length > 0 && (
+            <SecondaryButton onClick={handleClickNextButton}>もっと見る</SecondaryButton>
+          )}
         </div>
       </section>
     </>
