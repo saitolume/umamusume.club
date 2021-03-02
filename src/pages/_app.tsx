@@ -8,6 +8,7 @@ import { store } from '~/store'
 import 'focus-visible'
 import 'tailwindcss/tailwind.css'
 import '~/global.css'
+import Tracker from '~/components/Tracker'
 
 const App: NextPage<AppProps> = ({ Component, pageProps }) => (
   <Provider store={store}>
@@ -40,9 +41,10 @@ const App: NextPage<AppProps> = ({ Component, pageProps }) => (
       </section>
       <main>
         <Component {...pageProps} />
-        <UmamusumeProvider />
       </main>
     </div>
+    <UmamusumeProvider />
+    <Tracker />
   </Provider>
 )
 
