@@ -3,7 +3,7 @@ module.exports = {
   darkMode: false, // or 'media' or 'class'
   theme: {
     boxShadow: {
-      DEFAULT: '0 2px 0 #00000075'
+      DEFAULT: '0 2px 0 #00000075',
     },
     extend: {
       colors: {

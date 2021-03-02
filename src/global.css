@@ -1,0 +1,14 @@
+/* focus-visible の polyfill */
+*:focus:not([data-focus-visible-added]) {
+  outline: none;
+}
+
+button:active {
+  box-shadow: none;
+  transform: translate3d(0, 2px, 0);
+}
+
+a[data-anchor-button]:active {
+  box-shadow: none;
+  transform: translate3d(0, 2px, 0);
+}

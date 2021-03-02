@@ -5,7 +5,9 @@ import { Provider } from 'react-redux'
 import Header from '~/components/Header'
 import UmamusumeProvider from '~/components/UmamusumeProvider'
 import { store } from '~/store'
+import 'focus-visible'
 import 'tailwindcss/tailwind.css'
+import '~/global.css'
 
 const App: NextPage<AppProps> = ({ Component, pageProps }) => (
   <Provider store={store}>
