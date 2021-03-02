@@ -22,7 +22,7 @@ type Values = {
   support: Umamusume['id']
 }
 
-const TRAINES_PER_FETCH = 2
+const TRAINES_PER_FETCH = 15
 
 const Page: NextPage = () => {
   const dispatch = useDispatch()
