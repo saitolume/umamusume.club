@@ -1,10 +1,11 @@
 import { NextPage } from 'next'
 import Link from 'next/link'
-import React, { useCallback, useEffect } from 'react'
+import { useCallback, useEffect, useRef } from 'react'
 import { useForm } from 'react-hook-form'
 import { useDispatch, useSelector } from 'react-redux'
 import PrimaryButton from '~/components/Button/PrimaryButton'
 import SecondaryAnchorButton from '~/components/Button/SecondaryAnchorButton'
+import SecondaryButton from '~/components/Button/SecondaryButton'
 import FormGroup from '~/components/FormGroup'
 import Head from '~/components/Head'
 import Heading from '~/components/Heading'
@@ -12,7 +13,7 @@ import Label from '~/components/Label'
 import TextField from '~/components/TextField'
 import TrainerCard from '~/components/TrainerCard'
 import { actions, getTrainerIds, getUmamusumes } from '~/store'
-import { Umamusume } from '~/types'
+import { Trainer, Umamusume } from '~/types'
 import { trainerConverter } from '~/utils/converter'
 import { firestore } from '~/utils/firebase'
 
@@ -21,10 +22,14 @@ type SeaarchValues = {
   support: Umamusume['id']
 }
 
+const TRAINES_PER_FETCH = 2
+
 const Page: NextPage = () => {
   const dispatch = useDispatch()
   const umamusumes = useSelector(getUmamusumes)
   const trainerIds = useSelector(getTrainerIds)
+  const lastDocRef = useRef<firebase.default.firestore.QueryDocumentSnapshot<Trainer>>()
+  const queryRef = useRef<firebase.default.firestore.Query<Trainer>>()
 
   const { handleSubmit, register } = useForm<SeaarchValues>({
     defaultValues: {
@@ -33,22 +38,41 @@ const Page: NextPage = () => {
     },
   })
 
+  const handleClickNextButton = useCallback(async () => {
+    const { docs, query } = await firestore()
+      .collection('trainers')
+      .orderBy('createdAt', 'desc')
+      .withConverter(trainerConverter)
+      .startAfter(lastDocRef.current)
+      .limit(TRAINES_PER_FETCH)
+      .get()
+    const trainers = docs.map((doc) => doc.data())
+    dispatch(actions.insertTrainers(trainers))
+    lastDocRef.current = docs[docs.length - 1]
+    queryRef.current = query
+  }, [])
+
   const submitSearchForm = useCallback(async (values: SeaarchValues) => {
     const representativeId = umamusumes?.find(({ name }) => name === values.representative)?.id
     const supportId = umamusumes?.find(({ name }) => name === values.support)?.id
-
-    let query = firestore()
+    let trainerQuery = firestore()
       .collection('trainers')
       .orderBy('createdAt', 'desc')
-      .limit(20)
+      .limit(TRAINES_PER_FETCH)
       .withConverter(trainerConverter)
 
-    if (representativeId) query = query.where('representativeId', '==', representativeId)
-    if (supportId) query = query.where('supportId', '==', supportId)
+    if (representativeId) {
+      trainerQuery = trainerQuery.where('representativeId', '==', representativeId)
+    }
+    if (supportId) {
+      trainerQuery = trainerQuery.where('supportId', '==', supportId)
+    }
 
-    query.get().then(({ docs }) => {
+    trainerQuery.get().then(({ docs, query }) => {
       const trainers = docs.map((doc) => doc.data())
       dispatch(actions.updateTrainers(trainers))
+      lastDocRef.current = docs[docs.length - 1]
+      queryRef.current = query
     })
   }, [])
 
@@ -56,12 +80,14 @@ const Page: NextPage = () => {
     firestore()
       .collection('trainers')
       .orderBy('createdAt', 'desc')
-      .limit(20)
+      .limit(TRAINES_PER_FETCH)
       .withConverter(trainerConverter)
       .get()
-      .then(({ docs }) => {
+      .then(({ docs, query }) => {
         const trainers = docs.map((doc) => doc.data())
         dispatch(actions.updateTrainers(trainers))
+        lastDocRef.current = docs[docs.length - 1]
+        queryRef.current = query
       })
   }, [])
 
@@ -111,13 +137,16 @@ const Page: NextPage = () => {
             <SecondaryAnchorButton>新しい募集を作る</SecondaryAnchorButton>
           </Link>
         </div>
-        <ul className="px-3 pb-16">
+        <ul className="px-3 pb-8">
           {trainerIds.map((trainerId) => (
             <li key={trainerId} className="mb-6">
               <TrainerCard trainerId={trainerId} />
             </li>
           ))}
         </ul>
+        <div className="mb-6 flex justify-center">
+          <SecondaryButton onClick={handleClickNextButton}>もっと見る</SecondaryButton>
+        </div>
       </section>
     </>
   )
