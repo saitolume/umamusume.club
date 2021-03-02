@@ -21,7 +21,7 @@ const App: NextPage<AppProps> = ({ Component, pageProps }) => (
             target="_blank"
             rel="noopener noreferrer"
           >
-            saitolume
+            個人
           </a>
           が運営・開発する非公式SNSです。
         </strong>
