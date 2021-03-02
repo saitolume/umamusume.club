@@ -3,3 +3,4 @@
 .next
 firestore.rules
 node_modules
+out
