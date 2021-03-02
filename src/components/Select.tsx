@@ -10,7 +10,7 @@ const Select: ForwardRefRenderFunction<HTMLSelectElement, Props> = (
   <select
     ref={ref}
     className={classNames(
-      'border-uma-border2 border rounded h-10 px-2 font-bold text-uma-text1',
+      'border-uma-border2 border rounded h-10 px-2 font-bold text-uma-text1 cursor-pointer',
       className
     )}
     {...props}
