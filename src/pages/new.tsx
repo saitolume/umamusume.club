@@ -171,7 +171,7 @@ const Page: NextPage = () => {
         </form>
         <div className="mb-6 flex justify-center">
           <Link href="/" passHref>
-            <SecondaryAnchorButton>作成をやめて戻る</SecondaryAnchorButton>
+            <SecondaryAnchorButton>募集一覧へ</SecondaryAnchorButton>
           </Link>
         </div>
       </section>
